@@ -1,0 +1,48 @@
+name: Create Release
+on:
+  push:
+    tags:
+      - 'v*'
+env:
+  PYTHON_VERSION: "3.10"
+jobs:
+  build_using_pyinstaller:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set env of OUTPUT_NAME
+        shell: pwsh
+        run: echo "OUTPUT_NAME=JRESim_Dengo_$( $env:GITHUB_REF -replace '^refs/.*/' ).exe" >> $env:GITHUB_ENV
+      - uses: ilammy/msvc-dev-cmd@v1  # for install pygame package
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: install dependent packages
+        run: |
+          pip install pyinstaller
+          pip install -r requirements_Dengo.txt
+      - name: build to ${{ env.OUTPUT_NAME }}
+        run: pyinstaller --onefile --name ${{ env.OUTPUT_NAME }} main.py
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: JRESim_Dengo ${{ github.ref }}
+          body: |
+            Version ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/${{ env.OUTPUT_NAME }}
+          asset_name: ${{ env.OUTPUT_NAME }}
+          asset_content_type: application/octet-stream

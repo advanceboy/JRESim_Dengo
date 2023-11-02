@@ -1,6 +1,8 @@
 # JRESim_Dengo
 JR東日本トレインシミュレータ(JR EAST Train Simulator)をゲーム向けマスコンで操作できるようにするための、同人ソフトウェアです。
 
+ZUIKI 電車でＧＯ!! 専用ワンハンドルコントローラー の製造時期による違いを吸収したパッチをあてています。
+
 ## 現在対応しているマスコン
 - ZUIKI Switch向け電車でGOマスコン
 - (今後増やします)
@@ -11,6 +13,9 @@ JR東日本およびその関連会社、また音楽館とは一切関係があ
 
 ## 製作者
 Twitter: @mipsparc , GitHub: https://github.com/mipsparc
+
+### パッチ
+advanceboy ... Twitter: @advance_dolphin , GitHub: https://github.com/advanceboy
 
 ## 使い方
 - シミュレータ起動前にこのプログラムを起動するだけです
